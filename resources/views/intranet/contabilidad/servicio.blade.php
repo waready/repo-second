@@ -2,7 +2,7 @@
 @section('titulo', 'Orden de Servicio')
 
 @section('content')
-<i-servicio-solicitud :permissions="{{ $permisos }}"></i-servicio-solicitud>
+<i-servicio-solicitud-compra :permissions="{{ $permisos }}"></i-servicio-solicitud-compra>
 
 @endsection
 

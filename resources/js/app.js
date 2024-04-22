@@ -180,8 +180,9 @@ Vue.component("i-configuracion-periodos", require("./components/intranet/configu
 Vue.component("i-configuracion-cursos", require("./components/intranet/configuracion/CursoComponent.vue").default);
 Vue.component("i-configuracion-colegios", require("./components/intranet/configuracion/ColegioComponent.vue").default);
 
-//contabilidad
+//contabilidad OrdenCompraSolicitudComponent
 Vue.component("i-servicio-solicitud", require("./components/intranet/contabilidad/OrdenSolicitudComponent.vue").default);
+Vue.component("i-servicio-solicitud-compra", require("./components/intranet/contabilidad/OrdenCompraSolicitudComponent.vue").default);
 
 //auxiliar
 Vue.component("i-auxiliar-habilitacion", require("./components/intranet/auxiliar/HabilitacionComponent.vue").default);
