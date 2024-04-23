@@ -12,6 +12,7 @@ use App\VueTables\EloquentVueTables;
 use App\Models\Contrato;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Client;
 
 class OrdenSolicitudController extends Controller
 {
@@ -48,7 +49,7 @@ class OrdenSolicitudController extends Controller
             'provincia',
             'distrito',
             'celular',
-            'cuadro_adq',
+            'validated',
             'tipo_proceso',
             'num_contrato',
             'moneda',
@@ -56,7 +57,7 @@ class OrdenSolicitudController extends Controller
             'codigo',
             'pedido',
             'unidad_medida',
-            'descripcion'
+            'descripcion',
         ]);
    
         $response = $table->finish($data);
@@ -246,4 +247,60 @@ class OrdenSolicitudController extends Controller
         $response = Contrato::find($id);
         return $response->delete();
     }
+
+    public function busquedaEmpresa(Request $request)
+    {
+        $token = '';
+        $number = $request->valor;
+        $client = new Client(['base_uri' => 'https://api.apis.net.pe', 'verify' => false]);
+
+        $parameters = [
+            'http_errors' => false,
+            'connect_timeout' => 5,
+            'headers' => [
+                'Authorization' => 'Bearer '.$token,
+                'User-Agent' => 'laravel/guzzle',
+                'Accept' => 'application/json',
+            ],
+            'query' => ['numero' => $number]
+        ];
+        $res = $client->request('GET', '/v1/ruc', $parameters);
+        $response = json_decode($res->getBody()->getContents(), true);
+        return($response);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $rules = $request->validate([
+            'senor_es' => 'required',
+            'ruc' => 'required',
+        ], $messages = [
+            'required' => '* El campo :attribute es obligatorio.',
+        ]);
+
+        //return $request;
+        DB::beginTransaction();
+        try {
+
+            $data = contrato::find($id);
+            $data->apellidos_nombres = $request->senor_es;
+            $data->ruc = (string)$request->ruc;
+            
+            if($request->direccion)
+            $data->domicilio = $request->direccion;
+            
+            $data->validated = '1';
+            $data->save();
+
+            DB::commit();
+            $response["message"] = 'Guardado y Validado';
+            $response["status"] = true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            $response["message"] =  'Error al Guardar, intentelo nuevamante.';
+            $response["status"] =  false;
+        }
+        return $response;
+    }
+
 }

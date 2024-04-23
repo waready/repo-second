@@ -22,6 +22,19 @@
                                 <button type="button" class="p-0 m-0 h5 btn btn-link text-danger" @click="eliminarContrato(props.row.id)">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
+                                <button type="button" class="p-0 m-0 h5 btn btn-link text-dark" @click="ValidarContrato(props.row.id)">
+                                    <i class="fas fa-pen-alt"></i>
+                                </button>
+                            </div>
+                            <div slot="validated" slot-scope="props">
+                                <template>
+                                    <span v-if="props.row.validated == 0" class="badge badge-danger">
+                                        No Validado
+                                    </span>
+                                    <span v-else class="badge badge-success">
+                                        Validado
+                                    </span>
+                                </template>
                             </div>
                             <div slot="descripcion" slot-scope="props">
                                 <template v-if="props.row.descripcion">
@@ -36,7 +49,7 @@
             </div>
         </div>
 
-         <!-- Modal -->
+        <!-- Modal -->
         <div class="modal" id="myModal">
             <div class="modal-dialog" style="max-width: 80%;">
                 <div class="modal-content">
@@ -239,6 +252,124 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal -->
+        <div class="modal" id="Validacion">
+            <div class="modal-dialog" style="max-width: 80%;">
+                <div class="modal-content">
+                    <!-- Encabezado del Modal -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Modal Title</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Cuerpo del Modal -->
+                    <div class="modal-body">
+                        <!-- Contenido de tu formulario -->
+                        <div>
+                            <div class="row">
+                                <div class="col-6">
+                                 
+                                    <div class="form-group">
+                                        <h2>1. Datos Inscripcion:</h2>
+                                        <label for="senor_es">Señor(es)</label>
+                                        <input type="text" class="form-control" id="validationServerNombre" 
+                                                :class="{ 
+                                                    'is-valid': validarCampo('senor_es', proveedor.senor_es), 
+                                                    'is-invalid': !validarCampo('senor_es', proveedor.senor_es) 
+                                                }" 
+                                                v-model="proveedor.senor_es" required>
+                                        <!-- <div v-if="errors && errors.senor_es" class="text-danger">
+                                            {{ errors.senor_es[0] }}
+                                        </div> -->
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col">
+                                            <label for="ruc">RUC</label>
+                                            <input type="number" class="form-control" id="ruc"  
+                                                :class="{ 
+                                                    'is-valid': validarCampo('ruc', proveedor.ruc), 
+                                                    'is-invalid': !validarCampo('ruc', proveedor.ruc) 
+                                                }" 
+                                                v-model="proveedor.ruc" required>
+                                            <!-- <div v-if="errors && errors.ruc" class="text-danger">
+                                                {{ errors.ruc[0] }}
+                                            </div> -->
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="direccion">Dirección</label>
+                                        <input type="text" class="form-control" id="direccion" v-model="proveedor.direccion" />
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="col form-group">
+                                            <label for="telefono">Teléfono</label>
+                                            <input type="number" class="form-control" id="telefono" v-model="proveedor.telefono" disabled/>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn btn-primary" @click="CorregirDatos">Corregir</button>
+                                </div>
+                                <!-- <h2>Concepto General</h2> -->
+
+                                <div class="col-6">
+                                    <h2>2. Datos Validación</h2>
+                                    <div class="form-row">
+                                        <div class="col form-group">
+                                            <label for="senor_es">Señor(es)</label>
+                                            <input type="text" class="form-control" id="codigo" v-model="validacion.senor_es" disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="ruc">RUC</label>
+                                        <input type="number" class="form-control" id="descripcion_general" v-model="validacion.ruc" disabled/>
+                                    </div>
+                                  
+                                    <div class="form-group">
+                                        <label for="direccion">Dirección</label>
+                                        <input type="text" class="form-control" id="monto" v-model="validacion.direccion" disabled/>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="col form-group">
+                                            <label for="estado">Estado</label>
+                                            <div class="alert alert-success" style="padding: .45rem 1.25rem;" v-if="validacion.estado === 'ACTIVO'" role="alert">
+                                                {{validacion.estado}}
+                                            </div>
+                                            <div class="alert alert-danger" style="padding: .45rem 1.25rem;" v-else role="alert">
+                                                {{validacion.estado}}
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col form-group">
+                                            <label for="condicion">Condición</label>
+                                            <div class="alert alert-success" style="padding: .45rem 1.25rem;" v-if="validacion.condicion === 'HABIDO'" role="alert">
+                                                {{validacion.condicion}}
+                                            </div>
+                                            <div class="alert alert-danger" style="padding: .45rem 1.25rem;" v-else role="alert">
+                                                {{validacion.condicion}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <!-- <embed v-if="pdfURL" :src="pdfURL" type="application/pdf" width="100%" height="500" /> -->
+                        </div>
+                    </div>
+
+                    <!-- Pie del Modal -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -251,6 +382,7 @@ import "vue-select/dist/vue-select.css";
 export default {
     data() {
         return {
+            id:"",
             ejecutor: "UNIVERSIDAD NACIONAL DEL ALTIPLANO",
             num_id: "",
             dato: "",
@@ -280,6 +412,13 @@ export default {
                 descripciones: [],
                 monto: ""
             },
+            validacion:{
+                senor_es: "",
+                ruc: "",
+                direccion: "",
+                estado: "",
+                condicion: "",
+            },
             editando: false,
             indiceEditando: null,
             ///table//
@@ -295,7 +434,7 @@ export default {
                 "provincia",
                 "distrito",
                 "celular",
-                "cuadro_adq",
+                "validated",
                 "valor_total",
                 "codigo",
                 "pedido",
@@ -460,25 +599,84 @@ export default {
             });
             $("#ContratoEditModal").modal("show");
         },
+        ValidarContrato(id){
+            $(".loader").show();
+            axios.get("contrato/" + id + "/edit")
+            .then(response => {
+                
+                this.num_id = response.data.num_os;
+                this.proveedor.senor_es = response.data.apellidos_nombres;
+                this.proveedor.direccion = response.data.domicilio;
+                this.proveedor.cci = response.data.cci;
+                this.proveedor.ruc = response.data.ruc;
+                this.proveedor.telefono = response.data.celular;
+
+                // Hacer la solicitud AJAX para buscar la empresa 10414338556 10083967183 10708725973
+
+                axios.post("buscar-empresa", { valor: response.data.ruc })
+                //axios.post("buscar-empresa", { valor: 10083967183 })
+                .then(response => {
+                    this.id = id
+                    this.validacion.senor_es = response.data.nombre;
+                    this.validacion.ruc = response.data.numeroDocumento;
+                    this.validacion.direccion = response.data.direccion;
+                    this.validacion.estado = response.data.estado;
+                    this.validacion.condicion = response.data.condicion;
+                    $(".loader").hide();
+                    $("#Validacion").modal("show");
+                })
+                .catch(error => {
+                    console.error('Error al buscar empresa:', error);
+                });
+            })
+            .catch(error => {
+                console.error('Error al validar contrato:', error);
+            });
+        },
+        validarCampo(campo, valor) {
+            return this.validacion[campo] === this.proveedor[campo];
+        },
+        CorregirDatos(){
+            $(".loader").show();
+            axios.put("contrato/" + this.id, this.proveedor)
+            .then(response => {
+                $(".loader").hide();
+                if (response.data.status) {
+                    this.$refs.table.refresh();
+                    toastr.success(response.data.message);
+                    //$("#ModalFormulario").modal("hide");
+                    $("#Validacion").modal("hide");
+                } else {
+                    toastr.warning(response.data.message, "Aviso");
+                }
+            })
+            .catch(error => {
+                $(".loader").hide();
+                if (error.response.status === 422) {
+                    this.errors = error.response.data.errors || {};
+                }
+            });
+        },
         eliminarContrato(id){
             const confirmacion = window.confirm("¿Estás seguro de que deseas eliminar esta Orden?");
             if (confirmacion) {
                 //this.datos.descripciones.splice(index, 1);
-                   $(".loader").show();
-                    axios.delete("contrato/" + id )
-                        .then(response => {
-                            $(".loader").hide();
-                            console.log(response);
-                            this.$refs.table.refresh();
-                            toastr.success("Se elimino correctamente", "Aviso");
-                        })
-                        .catch(error => {
-                            $(".loader").hide();
-                            console.error(error);
-                        });
+                $(".loader").show();
+                axios.delete("contrato/" + id )
+                .then(response => {
+                    $(".loader").hide();
+                    console.log(response);
+                    this.$refs.table.refresh();
+                    toastr.success("Se elimino correctamente", "Aviso");
+                })
+                .catch(error => {
+                    $(".loader").hide();
+                    console.error(error);
+                });
 
             }
         }
-    }
+    },
+
 };
 </script>

@@ -978,11 +978,13 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('solicitud', 'Intranet\Contabilidad\OrdenSolicitudController@index');
             Route::post('solicitud/pdf', 'Intranet\Contabilidad\OrdenSolicitudController@generar_pdf');
             Route::post('solicitud/pdfAll', 'Intranet\Contabilidad\OrdenSolicitudController@generar_pdfAll');
+            Route::post('/buscar-empresa','Intranet\Contabilidad\OrdenSolicitudController@busquedaEmpresa');
 
             Route::get('contrato/{id}/edit', 'Intranet\Contabilidad\OrdenSolicitudController@edit');
 
+            Route::put('contrato/{id}', 'Intranet\Contabilidad\OrdenSolicitudController@update');
             Route::delete('contrato/{id}', 'Intranet\Contabilidad\OrdenSolicitudController@delete');
-
+            
             Route::get('contrato/lista/data', 'Intranet\Contabilidad\OrdenSolicitudController@lista');
             //import-
             Route::get('/importarContratos', 'Intranet\Contabilidad\OrdenSolicitudController@importarContratos');
