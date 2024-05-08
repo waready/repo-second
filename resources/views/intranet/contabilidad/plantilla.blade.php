@@ -117,7 +117,7 @@
         </tr>
     </table>
     <br><br>
-    <table style="font-size:8px; " border="1">
+    <table style="font-size:8px;" border="1">
         <tr style="text-align:center">
             <th colspan="4" style="font-weight: bold;">Codigo</th>
             <th colspan="4" style="font-weight: bold;">Unid. Med</th>
@@ -144,19 +144,21 @@
                             <?php } ?>
                         </ul>
                     </td>
-                    <td colspan="5" style="text-align:right; font-weight:bold;"> {{ number_format($item["monto"], ($item["monto"] == intval($item["monto"]) ? 2 : 2), '.', ',') }}</td>
+                    <td colspan="5" style="text-align:right; font-weight:bold;"></td>
                 </tr>
         <?php
             }
         }
         ?>
     </table>
+
     <br><br>
 
     <table style="font-size:8px">
         <tr>
             <td colspan="24">
                 @php $sumaTotal = 0; @endphp @foreach ($elements as $item) @php
+                $item['monto']=floatval($item['codigo']) * floatval($item['medida']);
                 $monto = floatval($item["monto"]);
                 $sumaTotal += $monto;
                 @endphp
@@ -179,8 +181,11 @@
 
                 @endphp
                 <table>
+                <tr>
+                        <td><span style="font-weight: bold;">LUGAR DE ENTREGA:</span> Almacén CEPREUNA (Jr. Acora 235 - Puno)</td>
+                    </tr>
                     <tr>
-                        <td></td>
+                        <td style="font-weight: bold;">SEGÚN C.C.C. N° 008</td>
                     </tr>
                 </table>
             </td>
@@ -189,11 +194,11 @@
                 <table style="border: 1px solid black; color:black; font-weight:bold;">
                     <tr>
                         <td> V. Venta:</td>
-                        <td style="text-align: right;"> {{ (number_format($sumaTotal, ($sumaTotal == intval($sumaTotal) ? 2 : 2), '.', ','))-(number_format($sumaTotal, ($sumaTotal == intval($sumaTotal) ? 2 : 2), '.', ',')*0.18) }}</td>
+                        <td style="text-align: right;"> {{ number_format($sumaTotal * (1 - 0.18), 2, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td> I.G.V.</td>
-                        <td style="text-align: right;">{{ (number_format($sumaTotal, ($sumaTotal == intval($sumaTotal) ? 2 : 2), '.', ',')*0.18) }}</td>
+                        <td style="text-align: right;">{{ number_format($sumaTotal * 0.18, 2, '.', ',') }}</td>
                     </tr>
                 </table><br>
             </td>

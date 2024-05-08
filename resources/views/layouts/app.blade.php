@@ -531,8 +531,8 @@
                                     href="{{ url('intranet/contabilidad/solicitud') }}"><span
                                         class="c-sidebar-nav-icon"></span> Orden de Servicio</a></li>
                             <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link"
-                                    href="{{ url('intranet/coordinador-auxiliar/asistencia/estudiante') }}"><span
-                                        class="c-sidebar-nav-icon"></span> solicitud 3</a></li>
+                                    href="{{ url('intranet/contabilidad/compra') }}"><span
+                                        class="c-sidebar-nav-icon"></span> Orden de Compra</a></li>
                             <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link"
                                     href="{{ url('intranet/coordinador-auxiliar/asistencia/estudiante') }}"><span
                                         class="c-sidebar-nav-icon"></span> solicitud 4</a></li>

@@ -182,7 +182,8 @@ Vue.component("i-configuracion-colegios", require("./components/intranet/configu
 
 //contabilidad OrdenCompraSolicitudComponent
 Vue.component("i-servicio-solicitud", require("./components/intranet/contabilidad/OrdenSolicitudComponent.vue").default);
-Vue.component("i-servicio-solicitud-compra", require("./components/intranet/contabilidad/OrdenCompraSolicitudComponent.vue").default);
+Vue.component("i-servicio-solicitud-compra", require("./components/intranet/contabilidad/CompraOrdenSolicitudComponent.vue").default);
+
 
 //auxiliar
 Vue.component("i-auxiliar-habilitacion", require("./components/intranet/auxiliar/HabilitacionComponent.vue").default);

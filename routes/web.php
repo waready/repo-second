@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\Artisan;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -989,6 +988,14 @@ Route::group(['middleware' => ['auth']], function () {
             //import-
             Route::get('/importarContratos', 'Intranet\Contabilidad\OrdenSolicitudController@importarContratos');
             Route::post('/contratos/import', 'Intranet\Contabilidad\OrdenSolicitudController@importar')->name('importar.contratos');
+
+
+            Route::get('compra', 'Intranet\Contabilidad\CompraServicioController@index');
+            Route::post('compra/pdf', 'Intranet\Contabilidad\CompraServicioController@generar_pdf');
+            Route::post('compra/pdfAll', 'Intranet\Contabilidad\CompraServicioController@generar_pdfAll');
+            //Route::post('/buscar-empresa','Intranet\Contabilidad\CompraServicioController@busquedaEmpresa');
+
+
         });
 
         // ****************************
