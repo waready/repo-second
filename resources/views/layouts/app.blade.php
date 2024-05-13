@@ -528,6 +528,9 @@
                                     href="{{ url('intranet/contabilidad/importarContratos') }}"><span
                                         class="c-sidebar-nav-icon"></span> Importar Contratos</a></li>
                             <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link"
+                                    href="{{ url('intranet/contabilidad/importarCompras') }}"><span
+                                        class="c-sidebar-nav-icon"></span> Importar Compras</a></li>
+                            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link"
                                     href="{{ url('intranet/contabilidad/solicitud') }}"><span
                                         class="c-sidebar-nav-icon"></span> Orden de Servicio</a></li>
                             <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link"

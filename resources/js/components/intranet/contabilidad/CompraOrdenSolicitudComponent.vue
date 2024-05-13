@@ -1,9 +1,57 @@
 <template>
     <div>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-            Abrir Modal
-        </button>
+        <vue-confirm-dialog></vue-confirm-dialog>
+        
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <header class="card-header">
+                        Lista de Contratos
+                        <!-- <button class="btn btn-primary float-right" @click="nuevo">
+                            <i class="fa fa-plus"></i> Nuevo
+                        </button> -->
+                        <!-- <button type="button" class="btn btn-primary" data-toggle="modal"  @click="GenerarAll()">
+                            Generador Masivo
+                        </button> -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                            Abrir Modal
+                        </button>
+                    </header>
+                    <div class="card-body">
+                        <v-server-table ref="table" :columns="columns" :options="options" url="/intranet/contabilidad/compra/lista/data">
+                            <div slot="actions" slot-scope="props">
+                                <button type="button" class="p-0 m-0 h5 btn btn-link text-info" @click="editarContrato(props.row.id)">
+                                    <i class="fas fa-file-signature"></i>
+                                </button>
+                                <button type="button" class="p-0 m-0 h5 btn btn-link text-danger" @click="eliminarContrato(props.row.id)">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                                <button type="button" class="p-0 m-0 h5 btn btn-link text-dark" @click="ValidarContrato(props.row.id)">
+                                    <i class="fas fa-pen-alt"></i>
+                                </button>
+                            </div>
+                            <div slot="validated" slot-scope="props">
+                                <template>
+                                    <span v-if="props.row.validated == 0" class="badge badge-danger">
+                                        No Validado
+                                    </span>
+                                    <span v-else class="badge badge-success">
+                                        Validado
+                                    </span>
+                                </template>
+                            </div>
+                            <div slot="descripcion" slot-scope="props">
+                                <template v-if="props.row.descripcion">
+                                    {{ truncateDescription(props.row.descripcion, 30) }}
+                                </template>
 
+                                <!-- <a href="#" @click="detalles(props.row.id)"><i class="fa fa-folder big-icon text-success" aria-hidden="true"></i></a> -->
+                            </div>
+                        </v-server-table>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Modal -->
         <div class="modal" id="myModal">
             <div class="modal-dialog" style="max-width: 80%;">
@@ -169,10 +217,9 @@
                                 <div class="col-6">
                                     <ul>
                                         <li v-for="(element, index) in elements" :key="index">
-                                            <strong>{{ element.ejecutor }}:</strong> {{ element.num_id }}
+                                            <strong>{{ ejecutor }}:</strong> {{ element.descripcion_general }}
                                         </li>
                                     </ul>
-                                    {{ datos.monto }}
                                 </div>
                             </div>
                             <embed v-if="pdfURL" :src="pdfURL" type="application/pdf" width="100%" height="500" />
@@ -187,13 +234,45 @@
                 </div>
             </div>
         </div>
+
+       <!-- Modal -->
+       <div class="modal" id="CompraItems">
+        <div class="modal-dialog" style="max-width: 80%;">
+        <div class="modal-content">
+            <!-- Encabezado del Modal -->
+            <div class="modal-header">
+            <h4 class="modal-title">Importar Items Excel</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Cuerpo del Modal -->
+            <div class="modal-body">
+            <!-- Contenido de tu formulario -->
+            <form @submit.prevent="submitForm" enctype="multipart/form-data">
+                <div class="form-group">
+                <label for="archivo_excel_items">Seleccionar archivo Excel:</label>
+                <input type="file" class="form-control-file" @change="onFileChange" id="archivo_excel_items">
+                </div>
+                <div class="text-center">
+                <button type="submit" class="btn btn-primary">Importar</button>
+                </div>
+            </form>
+            <!-- Fin del formulario -->
+            </div>
+        </div>
+        </div>
+    </div>
+
     </div>
 </template>
 
 <script>
+import toastr from "toastr";
 export default {
     data() {
         return {
+            id:"",
+            file: null,
             ejecutor: "UNIVERSIDAD NACIONAL DEL ALTIPLANO",
             num_id: "",
             dato: "",
@@ -224,7 +303,40 @@ export default {
                 monto: ""
             },
             editando: false,
-            indiceEditando: null
+            indiceEditando: null,
+            ///table//
+            columns: [
+                "id",
+                "dni",
+                "ruc",
+                "cci",
+                "num_os",
+                "apellidos_nombres",
+                'referencia',
+                "domicilio",
+                "departamento",
+                "provincia",
+                "distrito",
+                "celular",
+                "cuadro_adq",
+                "tipo_proceso",
+                "num_contrato",
+                "moneda",
+                "valor_total",
+                "actions"
+            ],
+            options: {
+                headings: {
+                    id: "id",
+                    dni: "Documento",
+                    apellidos_nombres: "Nombres",
+                    ruc: "RUC",
+                    num_os: "N° O/S"
+                },
+                sortable: ["id", "dni", "apellidos_nombres"],
+                filterable: ["dni","ruc","apellidos_nombres","referencia", "num_os", "valor_total", "descripcion"],
+                filterByColumn: true
+            }
         };
     },
     methods: {
@@ -265,29 +377,92 @@ export default {
         addElement() {
             if (this.ejecutor.trim() !== "") {
                 this.elements.push({
-                    ejecutor: this.ejecutor,
-                    num_id: this.num_id,
-                    senor_es: this.proveedor.senor_es,
-                    direccion: this.proveedor.direccion,
-                    cci: this.proveedor.cci,
-                    ruc: this.proveedor.ruc,
-                    telefono: this.proveedor.telefono,
-                    fax: this.proveedor.fax,
-                    cuadro_adquisicion: this.condiciones.cuadro_adquisicion,
-                    tipo_proceso: this.condiciones.tipo_proceso,
-                    num_contrato: this.condiciones.num_contrato,
-                    moneda: this.condiciones.moneda,
-                    tipo_cambio: this.condiciones.tipo_cambio,
-                    concepto: this.concepto_general,
                     codigo: this.datos.codigo,
                     medida: this.datos.medida,
                     descripcion_general: this.datos.descripcion_general,
-                    descripciones: JSON.parse(JSON.stringify(this.datos.descripciones)),
+                    descripciones: this.datos.descripciones,
                     monto: this.datos.monto
                 });
                 // this.elementTitle = "";
                 // this.elementDescription = "";
             }
+        },
+        onFileChange(event) {
+            // Manejar el cambio en el input de archivo y asignar el archivo seleccionado a la variable file
+            this.file = event.target.files[0];
+        },
+        submitForm() {
+
+            $(".loader").show();
+            const archivo = this.file;
+            
+            const formData = new FormData();
+            formData.append('archivo_excel', archivo);
+            
+            axios.post('compra/import/items/'+this.id, formData, {
+                headers: {
+                'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(response => {
+                $(".loader").hide();
+                this.file = null,
+                console.log('Respuesta del servidor:', response.data);
+                if(response.data?.status){
+                    toastr.success(response.data.message, "Success");
+                }else{
+                    toastr.error(response.data.message, "Error");
+                }
+                $("#CompraItems").modal("hide");
+            })
+            .catch(error => {
+                $(".loader").hide();
+                this.file = null,
+                console.error('Error al enviar la solicitud:', error);
+                toastr.error('Error al enviar la solicitud:', error);
+                $("#CompraItems").modal("hide");
+            });
+        },
+        ValidarContrato(id){
+            this.id = id;
+            $("#CompraItems").modal("show");
+        },
+        editarContrato(id){
+            this.id = id;
+            $(".loader").show();
+            axios.get("compra/" + id + "/edit").then(response => {
+                console.log(response);
+                this.num_id = response.data.num_os;
+                this.proveedor.senor_es = response.data.apellidos_nombres;
+                this.proveedor.direccion = response.data.domicilio;
+                this.proveedor.cci = response.data.cci;
+                this.proveedor.ruc = response.data.ruc;
+                this.proveedor.telefono = response.data.celular;
+
+                this.condiciones.cuadro_adquisicion = response.data.cuadro_adq;
+                this.condiciones.tipo_proceso = response.data.tipo_proceso;
+                this.condiciones.num_contrato = response.data.num_contrato;
+                this.condiciones.moneda = response.data.moneda;
+                this.condiciones.concepto = response.data.referencia;
+
+                // Obtener los ítems de la compra del objeto de respuesta
+                const items = response.data.items;
+
+                // Iterar sobre cada ítem y agregarlo a this.elements
+                items.forEach(item => {
+                    this.elements.push({
+                        codigo: item.codigo, // Ajusta esto según la estructura de tu ítem
+                        medida: item.unidad_medida,
+                        descripcion_general: item.descripcion_general,
+                        descripciones: [],
+                        monto: ""
+                    });
+                });
+            
+                $(".loader").hide();
+            });
+
+            $("#myModal").modal("show");
         },
         generatePDF() {
             // Convierte la lista de elementos a JSON

@@ -980,7 +980,6 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('/buscar-empresa','Intranet\Contabilidad\OrdenSolicitudController@busquedaEmpresa');
 
             Route::get('contrato/{id}/edit', 'Intranet\Contabilidad\OrdenSolicitudController@edit');
-
             Route::put('contrato/{id}', 'Intranet\Contabilidad\OrdenSolicitudController@update');
             Route::delete('contrato/{id}', 'Intranet\Contabilidad\OrdenSolicitudController@delete');
             
@@ -988,13 +987,22 @@ Route::group(['middleware' => ['auth']], function () {
             //import-
             Route::get('/importarContratos', 'Intranet\Contabilidad\OrdenSolicitudController@importarContratos');
             Route::post('/contratos/import', 'Intranet\Contabilidad\OrdenSolicitudController@importar')->name('importar.contratos');
-
+            
+            //////Compra
 
             Route::get('compra', 'Intranet\Contabilidad\CompraServicioController@index');
             Route::post('compra/pdf', 'Intranet\Contabilidad\CompraServicioController@generar_pdf');
             Route::post('compra/pdfAll', 'Intranet\Contabilidad\CompraServicioController@generar_pdfAll');
-            //Route::post('/buscar-empresa','Intranet\Contabilidad\CompraServicioController@busquedaEmpresa');
 
+            Route::get('compra/{id}/edit', 'Intranet\Contabilidad\CompraServicioController@edit');
+            Route::put('compra/{id}', 'Intranet\Contabilidad\CompraServicioController@update');
+            Route::delete('compra/{id}', 'Intranet\Contabilidad\CompraServicioController@delete');
+
+            Route::get('compra/lista/data', 'Intranet\Contabilidad\CompraServicioController@lista');
+            //import-
+            Route::get('/importarCompras', 'Intranet\Contabilidad\CompraServicioController@importarCompras');
+            Route::post('/compra/import', 'Intranet\Contabilidad\CompraServicioController@importarCompra')->name('importar.compras');
+            Route::post('/compra/import/items/{id}', 'Intranet\Contabilidad\CompraServicioController@importarItems');
 
         });
 

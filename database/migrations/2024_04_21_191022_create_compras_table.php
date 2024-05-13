@@ -15,12 +15,12 @@ class CreateComprasTable extends Migration
     {
         Schema::create('compras', function (Blueprint $table) {
             $table->id();
-            $table->char('dni', 30);
+            $table->char('dni', 30)->nullable();
             $table->char("ruc", 11);
             $table->char("cci", 20);
             $table->string('num_os');
-            $table->string('apellidos_nombres');
-            $table->string('referencia');
+            $table->text('apellidos_nombres');
+            $table->text('referencia');
             $table->string('domicilio');
             $table->string('departamento');
             $table->string('provincia');
