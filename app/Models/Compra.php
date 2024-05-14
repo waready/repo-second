@@ -24,6 +24,7 @@ class Compra extends Model
         'tipo_proceso',
         'num_contrato',
         'moneda',
+        'cccn',
         'valor_total'
     ];
     //public $timestamps = false;

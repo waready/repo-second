@@ -30,6 +30,7 @@ class CreateComprasTable extends Migration
             $table->string('tipo_proceso');
             $table->string('num_contrato');
             $table->string('moneda');
+            $table->string('cccn')->nullable();
             $table->decimal('valor_total', 10, 2); // Changed to decimal for monetary values
             $table->enum('sincronizar_pdf', ["0", "1", "2"])->default("0")->comment("0: No, 1: Si, 2: error");
             $table->string('urlpdf')->nullable();

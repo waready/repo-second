@@ -15,7 +15,7 @@ class CreateComprasItemsTable extends Migration
     {
         Schema::create('compras_items', function (Blueprint $table) {
             $table->id();
-            $table->text('descripcion'); 
+            $table->text('descripcion')->nullable(); 
             $table->string("descripcion_general"); 
             $table->string('codigo');
             $table->string('pedido');

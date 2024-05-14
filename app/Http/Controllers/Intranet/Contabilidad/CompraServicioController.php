@@ -234,7 +234,7 @@ class CompraServicioController extends Controller
                     'num_contrato' => $fila['O'],
                     'moneda' => $fila['P'],
                     'valor_total' => $fila['Q'],
-                    // 'codigo' => $fila['R'],
+                    'cccn' => $fila['R'],
                     // 'pedido' => $fila['S'],
                     // 'unidad_medida' => $fila['T'],
                     // 'descripcion_general' => $fila['U'],

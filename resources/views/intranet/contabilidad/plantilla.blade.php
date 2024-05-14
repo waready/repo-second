@@ -185,7 +185,7 @@
                         <td><span style="font-weight: bold;">LUGAR DE ENTREGA:</span> Almacén CEPREUNA (Jr. Acora 235 - Puno)</td>
                     </tr>
                     <tr>
-                        <td style="font-weight: bold;">SEGÚN C.C.C. N° 008</td>
+                        <td style="font-weight: bold;">SEGÚN C.C.C. N° {{$condiciones["CCCN"]}}</td>
                     </tr>
                 </table>
             </td>
